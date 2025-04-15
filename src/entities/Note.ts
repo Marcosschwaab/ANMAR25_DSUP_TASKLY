@@ -1,24 +1,20 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 import { Task } from './Task';
 
 @Entity()
 export class Note {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @ManyToOne(() => Task, task => task.notes)
-    @JoinColumn({ name: 'task_id' })
-    task: Task;
+  @Column({ length: 255 })
+  content: string;
 
-    @Column({ type: 'varchar', length: 255 })
-    title: string;
+  @ManyToOne(() => Task, task => task.notes, { onDelete: 'CASCADE' })
+  task: Task;
 
-    @Column({ type: 'text' })
-    content: string;
+  @CreateDateColumn()
+  created_at: Date;
 
-    @CreateDateColumn()
-    created_at: Date;
-
-    @UpdateDateColumn()
-    updated_at: Date;
+  @UpdateDateColumn()
+  updated_at: Date;
 }

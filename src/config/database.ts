@@ -1,7 +1,7 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import * as dotenv from 'dotenv';
-import Task from '../entities/Task';
-import Note from '../entities/Note';
+import { Task } from '../entities/Task';
+import {Note} from '../entities/Note';
 
 dotenv.config(); 
 
