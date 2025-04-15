@@ -1,18 +1,22 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
-export class User {
-
+export class Task {
     @PrimaryGeneratedColumn()
-    id: number
+    id: number;
 
-    @Column()
-    firstName: string
+    @Column({ type: 'varchar', length: 255 })
+    title: string;
 
-    @Column()
-    lastName: string
+    @Column({ type: 'text' })
+    description: string;
 
-    @Column()
-    age: number
+    @Column({ type: 'enum', enum: ['todo', 'in_progress', 'done'], default: 'todo' })
+    status: 'todo' | 'in_progress' | 'done';
 
+    @CreateDateColumn()
+    created_at: Date;
+
+    @UpdateDateColumn()
+    updated_at: Date;
 }
