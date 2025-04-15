@@ -7,7 +7,6 @@ export class Note {
     id: number;
 
     @ManyToOne(() => Task, task => task.notes)
-    
     @JoinColumn({ name: 'task_id' })
     task: Task;
 

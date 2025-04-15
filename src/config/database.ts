@@ -1,5 +1,7 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import * as dotenv from 'dotenv';
+import Task from '../entities/Task';
+import Note from '../entities/Note';
 
 dotenv.config(); 
 
@@ -12,6 +14,7 @@ const databaseConfig: DataSourceOptions = {
   database: process.env.DATABASE_NAME,
   synchronize: false, 
   logging: true,
+  entities: [Task, Note],
 };
 
 export const dataSource = new DataSource(databaseConfig);
