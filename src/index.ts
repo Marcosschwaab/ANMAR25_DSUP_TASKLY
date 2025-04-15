@@ -14,8 +14,8 @@ app.use(express.json());
 app.use(cors());
 
 //routes
-app.use('/', taskRoutes);
-app.use('/', noteRoutes);
+app.use('/api/v1/', taskRoutes);
+app.use('/api/v1/', noteRoutes);
 
 //Database test
 dataSource.initialize().then(() => {
