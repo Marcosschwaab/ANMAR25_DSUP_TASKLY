@@ -26,6 +26,20 @@ export class NoteService {
       where: { task: { id: taskId } },
       relations: ['task'],
     });
-    
+  }
+  async getNoteById(id: number): Promise<Note | null> {
+    return this.noteRepository.findOne({ where: { id }, relations: ['task'] });
+  }
+
+  async updateNote(id: number, content: string): Promise<Note | null> {
+    const note = await this.noteRepository.findOneBy({ id });
+    if (!note) return null;
+    note.content = content;
+    return this.noteRepository.save(note);
+  }
+
+  async deleteNote(id: number): Promise<boolean> {
+    const result = await this.noteRepository.delete(id);
+    return result.affected !== 0;
   }
 }

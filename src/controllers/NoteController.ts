@@ -25,4 +25,31 @@ export class NoteController {
       const notes = await this.noteService.getNotesByTask(Number(taskId));
       res.json(notes);
     };
+
+    getById = async (req: Request, res: Response): Promise<void> => {
+      const note = await this.noteService.getNoteById(Number(req.params.id));
+      if (!note) {
+        res.status(404).json({ message: 'Note not found' });
+        return;
+      }
+      res.json(note);
+    };
+  
+    update = async (req: Request, res: Response): Promise<void> => {
+      const note = await this.noteService.updateNote(Number(req.params.id), req.body.content);
+      if (!note) {
+        res.status(404).json({ message: 'Note not found' });
+        return;
+      }
+      res.json(note);
+    };
+  
+    delete = async (req: Request, res: Response): Promise<void> => {
+      const deleted = await this.noteService.deleteNote(Number(req.params.id));
+      if (!deleted) {
+        res.status(404).json({ message: 'Note not found' });
+        return;
+      }
+      res.status(204).send();
+    };
 }
