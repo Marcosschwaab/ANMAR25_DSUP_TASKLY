@@ -1,9 +1,24 @@
-import express, { Application } from 'express';
+// src/app.ts
+import express from 'express';
 import cors from 'cors';
 
-const app: Application = express();
+import { dataSource } from './config/database';
 
-app.use(cors());
+const app = express();
+const port = process.env.PORT || 3000;
+
+// Middleware
 app.use(express.json());
+app.use(cors());
 
-export default app;
+//Database test
+dataSource.initialize().then(() => {
+    console.log('Database connected!');
+}).catch((error) => {
+    console.error('Error connecting to database:', error);
+});
+
+//Server test
+app.listen(port, () => {
+    console.log(`Server running in port ${port}`);
+});

@@ -3,11 +3,11 @@ version: '3.8'
 services:
   mysql:
     image: mysql:8.0
-    container_name: taskly_mysql
+    container_name: mysql
     restart: always
     environment:
-      MYSQL_USER: root
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_ROOT_PASSWORD: 12345678
       MYSQL_DATABASE: taskly
     ports:
       - "3306:3306"

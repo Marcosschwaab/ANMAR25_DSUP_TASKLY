@@ -1,9 +1,9 @@
-import { DataSource } from 'typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
 import * as dotenv from 'dotenv';
 
 dotenv.config(); 
 
-const dataSource = new DataSource({
+const databaseConfig: DataSourceOptions = {
   type: 'mysql',
   host: process.env.DATABASE_HOST,
   port: parseInt(process.env.DATABASE_PORT || '3306'),
@@ -12,7 +12,6 @@ const dataSource = new DataSource({
   database: process.env.DATABASE_NAME,
   synchronize: false, 
   logging: true,
+};
 
-});
-
-export default dataSource;
+export const dataSource = new DataSource(databaseConfig);
