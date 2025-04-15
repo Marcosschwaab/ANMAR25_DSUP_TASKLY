@@ -13,6 +13,15 @@ export class TaskController {
     res.json(tasks);
   };
 
+  getById = async (req: Request, res: Response) => {
+    const task = await this.taskService.getTaskById(Number(req.params.id));
+    if (!task) {
+      res.status(404).json({ message: 'Task not found' });
+      return;
+    }
+    res.json(task);
+  };
+
   create = async (req: Request, res: Response) => {
     const task = await this.taskService.createTask(req.body);
     res.status(201).json(task);

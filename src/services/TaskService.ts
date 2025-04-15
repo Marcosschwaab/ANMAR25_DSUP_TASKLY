@@ -14,7 +14,9 @@ export class TaskService {
   async getAllTasks(): Promise<Task[]> {
     return this.taskRepository.find();
   }
-
+  async getTaskById(id: number): Promise<Task | null> {
+    return this.taskRepository.findOneBy({ id });
+  }
   async createTask(data: Partial<Task>): Promise<Task> {
     const task = this.taskRepository.create(data);
     return this.taskRepository.save(task);
