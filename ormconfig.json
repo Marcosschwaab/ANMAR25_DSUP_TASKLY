@@ -10,15 +10,11 @@
     "entities": [
       "src/entities/*.js"
     ],
-    "subscribers": [
-      "src/subscriber/*.js"
-    ],
     "migrations": [
-      "src/migration/*.js"
+      "src/migrations/*.js"
     ],
     "cli": {
       "entitiesDir": "src/entities",
-      "migrationsDir": "src/migration",
-      "subscribersDir": "src/subscriber"
+      "migrationsDir": "src/migrations"
     }
   }

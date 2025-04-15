@@ -14,6 +14,7 @@ const databaseConfig: DataSourceOptions = {
   database: process.env.DATABASE_NAME,
   synchronize: false, 
   logging: false,
+  migrations: ['src/migrations/**/*.ts'],
   entities: [Task, Note]
 };
 

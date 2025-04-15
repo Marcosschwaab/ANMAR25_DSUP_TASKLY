@@ -11,7 +11,10 @@
       "dev": "nodemon src/index.ts",
       "lint": "eslint src/**/*.ts",
       "prettier": "prettier --write .",
-      "typeorm": "typeorm-ts-node-commonjs"
+      "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js --dataSource=src/config/database.ts",
+      "migration:generate": "npm run typeorm -- migration:generate src/migrations/createInitialSchema",
+      "migration:run": "npm run typeorm -- migration:run",
+      "migration:revert": "npm run typeorm -- migration:revert"
    },
    "repository": {
       "type": "git",

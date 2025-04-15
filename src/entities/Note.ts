@@ -9,7 +9,7 @@ export class Note {
   @Column({ length: 255 })
   content: string;
 
-  /* @OneToMany(() => Note, note => note.task)
+   /*@OneToMany(() => Note, note => note.task)
   notes!: Note[];*/
 
   @CreateDateColumn()
