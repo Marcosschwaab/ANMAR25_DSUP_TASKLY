@@ -1,6 +1,8 @@
 // src/app.ts
 import express from 'express';
 import cors from 'cors';
+import taskRoutes from './routes/taskRoutes';
+
 
 import { dataSource } from './config/database';
 
@@ -10,6 +12,9 @@ const port = process.env.PORT || 3000;
 // Middleware
 app.use(express.json());
 app.use(cors());
+
+//routes
+app.use('/tasks', taskRoutes);
 
 //Database test
 dataSource.initialize().then(() => {
