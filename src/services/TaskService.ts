@@ -21,5 +21,15 @@ export class TaskService {
     const task = this.taskRepository.create(data);
     return this.taskRepository.save(task);
   }
+  async updateTask(id: number, data: Partial<Task>): Promise<Task | null> {
+    const task = await this.taskRepository.findOneBy({ id });
+    if (!task) return null;
 
+    Object.assign(task, data);
+    return this.taskRepository.save(task);
+  }
+  async deleteTask(id: number): Promise<boolean> {
+    const result = await this.taskRepository.delete(id);
+    return result.affected !== 0;
+  }
 }

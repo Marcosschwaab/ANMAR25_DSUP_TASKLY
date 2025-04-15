@@ -3,7 +3,6 @@ import "reflect-metadata"
 import cors from 'cors';
 import taskRoutes from './routes/taskRoutes';
 
-
 import { dataSource } from './config/database';
 
 const app = express();
