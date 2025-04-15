@@ -1,8 +1,9 @@
-import express from 'express';
+import express, { ErrorRequestHandler } from 'express';
 import "reflect-metadata"
 import cors from 'cors';
 import taskRoutes from './routes/taskRoutes';
 import noteRoutes from './routes/noteRoutes';
+import { errorHandler } from './middlewares/errorHandler';
 
 import { dataSource } from './config/database';
 
@@ -16,6 +17,9 @@ app.use(cors());
 //routes
 app.use('/api/v1/', taskRoutes);
 app.use('/api/v1/', noteRoutes);
+
+// Error handler
+app.use(errorHandler as ErrorRequestHandler);
 
 //Database test
 dataSource.initialize().then(() => {
