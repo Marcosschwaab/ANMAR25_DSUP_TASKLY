@@ -13,8 +13,8 @@ const databaseConfig: DataSourceOptions = {
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
   synchronize: false, 
-  logging: true,
-  entities: [Task, Note],
+  logging: false,
+  entities: [Task, Note]
 };
 
 export const dataSource = new DataSource(databaseConfig);
