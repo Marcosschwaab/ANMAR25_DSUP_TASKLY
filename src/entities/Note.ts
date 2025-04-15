@@ -1,4 +1,4 @@
-import { OneToMany, ManyToOne } from 'typeorm';
+import { ManyToOne } from 'typeorm';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn} from 'typeorm';
 import { Task } from './Task';
 
@@ -12,9 +12,6 @@ export class Note {
 
   @ManyToOne(() => Task, task => task.notes)
   task: Task;
-
-  @OneToMany(() => Note, note => note.task)
-  notes!: Note[];
 
   @CreateDateColumn()
   created_at: Date;

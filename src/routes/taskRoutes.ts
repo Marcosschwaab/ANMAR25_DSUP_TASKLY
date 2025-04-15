@@ -4,11 +4,11 @@ import { TaskController } from '../controllers/TaskController';
 const router = Router();
 const taskController = new TaskController();
 
-router.get('/', taskController.getAll);
-router.get('/:id', taskController.getById);
-router.post('/', taskController.create);
-router.put('/:id', taskController.update);
-router.delete('/:id', taskController.delete);
+router.get('/tasks/', taskController.getAll);
+router.get('/tasks/:id', taskController.getById);
+router.post('/tasks/', taskController.create);
+router.put('/tasks/:id', taskController.update);
+router.delete('/tasks/:id', taskController.delete);
 
 export default router;
 

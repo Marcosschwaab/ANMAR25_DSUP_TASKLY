@@ -2,6 +2,7 @@ import express from 'express';
 import "reflect-metadata"
 import cors from 'cors';
 import taskRoutes from './routes/taskRoutes';
+import noteRoutes from './routes/noteRoutes';
 
 import { dataSource } from './config/database';
 
@@ -13,7 +14,8 @@ app.use(express.json());
 app.use(cors());
 
 //routes
-app.use('/tasks', taskRoutes);
+app.use('/', taskRoutes);
+app.use('/', noteRoutes);
 
 //Database test
 dataSource.initialize().then(() => {
