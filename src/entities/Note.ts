@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-//import { Task } from './Task';
+import { OneToMany, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn} from 'typeorm';
+import { Task } from './Task';
 
 @Entity()
 export class Note {
@@ -9,8 +10,11 @@ export class Note {
   @Column({ length: 255 })
   content: string;
 
-   /*@OneToMany(() => Note, note => note.task)
-  notes!: Note[];*/
+  @ManyToOne(() => Task, task => task.notes)
+  task: Task;
+
+  @OneToMany(() => Note, note => note.task)
+  notes!: Note[];
 
   @CreateDateColumn()
   created_at: Date;
