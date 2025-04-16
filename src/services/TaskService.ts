@@ -22,6 +22,14 @@ export class TaskService {
         search: `%${query.search}%`,
       });
     }
+    
+    if (query.status) {
+      qb.andWhere('task.status = :status', { status: query.status });
+    }
+    
+    if (query.priority) {
+      qb.andWhere('task.priority = :priority', { priority: query.priority });
+    }
   
     return qb
       .skip(skip)
