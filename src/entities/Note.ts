@@ -1,5 +1,5 @@
 import { ManyToOne } from 'typeorm';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert} from 'typeorm';
 import { Task } from './Task';
 
 @Entity()
@@ -16,6 +16,11 @@ export class Note {
   @CreateDateColumn()
   created_at: Date;
 
-  @UpdateDateColumn()
-  updated_at: Date;
+  @UpdateDateColumn({ nullable: true })
+  updated_at: Date | null;
+
+  @BeforeInsert()
+  preventUpdatedAtOnInsert() {
+    this.updated_at = null;
+  }
 }

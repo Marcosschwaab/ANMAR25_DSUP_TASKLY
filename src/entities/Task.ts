@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, BeforeInsert } from 'typeorm';
 import { Note } from './Note';
 
 @Entity()
@@ -21,6 +21,11 @@ export class Task {
     @CreateDateColumn()
     created_at: Date;
 
-    @UpdateDateColumn()
-    updated_at: Date;
+    @UpdateDateColumn({ nullable: true })
+    updated_at: Date | null;
+  
+    @BeforeInsert()
+    preventUpdatedAtOnInsert() {
+      this.updated_at = null;
+    }
 }

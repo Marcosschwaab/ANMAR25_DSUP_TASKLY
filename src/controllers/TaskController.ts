@@ -28,7 +28,7 @@ export class TaskController {
   };
 
   create = async (req: Request, res: Response): Promise<void> => {
-    const task = await this.service.createTask(req.body);
+    const task = await this.service.createTask(req.body); 
     res.status(201).json(task);
   };
 
