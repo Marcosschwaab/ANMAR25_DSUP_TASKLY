@@ -1,46 +1,42 @@
-import { Repository } from 'typeorm';
-import { Note } from '../entities/Note';
+import { TaskRepository } from '../repositories/TaskRepository';
+import { NoteRepository } from '../repositories/NoteRepository';
 import { Task } from '../entities/Task';
-import { dataSource } from '../config/database';
-
 
 export class TaskService {
-  private taskRepository: Repository<Task>;
-  private noteRepository: Repository<Note>;
-
-  constructor() {
-    this.taskRepository = dataSource.getRepository(Task);
-    this.noteRepository = dataSource.getRepository(Note);
-  }
+  constructor(
+    private taskRepo: TaskRepository,
+    private noteRepo: NoteRepository
+  ) {}
 
   async getAllTasks(): Promise<Task[]> {
-    return this.taskRepository.find();
+    return this.taskRepo.findAll();
   }
+
   async getTaskById(id: number): Promise<Task | null> {
-    return this.taskRepository.findOneBy({ id });
+    return this.taskRepo.findById(id);
   }
+
   async createTask(data: Partial<Task>): Promise<Task> {
-    const task = this.taskRepository.create(data);
-    return this.taskRepository.save(task);
+    const task = this.taskRepo.create(data);
+    return this.taskRepo.save(task);
   }
+
   async updateTask(id: number, data: Partial<Task>): Promise<Task | null> {
-    const task = await this.taskRepository.findOneBy({ id });
+    const task = await this.taskRepo.findById(id);
     if (!task) return null;
-
     Object.assign(task, data);
-    return this.taskRepository.save(task);
+    return this.taskRepo.save(task);
   }
-  async deleteTask(id: number): Promise<boolean> {
-    const task = await this.taskRepository.findOne({
-      where: { id },
-      relations: ['notes'],
-    });
-    if (!task) return false;
-    if (task.notes && task.notes.length > 0) {
-      await this.noteRepository.remove(task.notes);
-    }
-    await this.taskRepository.remove(task);
 
+  async deleteTask(id: number): Promise<boolean> {
+    const task = await this.taskRepo.findById(id);
+    if (!task) return false;
+
+    if (task.notes && task.notes.length > 0) {
+      await this.noteRepo.removeMany(task.notes);
+    }
+
+    await this.taskRepo.remove(task);
     return true;
   }
 }

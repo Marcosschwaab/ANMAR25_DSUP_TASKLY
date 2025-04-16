@@ -1,12 +1,16 @@
 import { Request, Response } from 'express';
 import { NoteService } from '../services/NoteService';
+import { NoteRepository } from '../repositories/NoteRepository';
+import { TaskRepository } from '../repositories/TaskRepository';
 
 export class NoteController {
-    private noteService: NoteService;
-  
-    constructor() {
-      this.noteService = new NoteService();
-    }
+  private noteService: NoteService;
+
+  constructor() {
+    const noteRepository = new NoteRepository();
+    const taskRepository = new TaskRepository();
+    this.noteService = new NoteService(noteRepository, taskRepository);
+  }
   
     createForTask = async (req: Request, res: Response): Promise<void> => {
       const { taskId } = req.params;

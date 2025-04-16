@@ -1,45 +1,39 @@
-import { dataSource } from '../config/database';
+import { NoteRepository } from '../repositories/NoteRepository';
+import { TaskRepository } from '../repositories/TaskRepository';
 import { Note } from '../entities/Note';
-import { Task } from '../entities/Task';
-import { Repository } from 'typeorm';
-
 
 export class NoteService {
-    private noteRepository: Repository<Note>;
-    private taskRepository: Repository<Task>;
-  
-    constructor() {
-      this.noteRepository = dataSource.getRepository(Note);
-      this.taskRepository = dataSource.getRepository(Task);
-    }
+  constructor(
+    private noteRepo: NoteRepository,
+    private taskRepo: TaskRepository
+  ) {}
 
   async createNoteForTask(taskId: number, content: string): Promise<Note | null> {
-    const task = await this.taskRepository.findOneBy({ id: taskId });
+    const task = await this.taskRepo.findById(taskId);
     if (!task) return null;
 
-    const note = this.noteRepository.create({ content, task });
-    return this.noteRepository.save(note);
+    const note = this.noteRepo.create({ content, task });
+    return this.noteRepo.save(note);
   }
 
   async getNotesByTask(taskId: number): Promise<Note[]> {
-    return this.noteRepository.find({
-      where: { task: { id: taskId } },
-      relations: ['task'],
-    });
+    return this.noteRepo.findByTaskId(taskId);
   }
+
   async getNoteById(id: number): Promise<Note | null> {
-    return this.noteRepository.findOne({ where: { id }, relations: ['task'] });
+    return this.noteRepo.findById(id);
   }
 
   async updateNote(id: number, content: string): Promise<Note | null> {
-    const note = await this.noteRepository.findOneBy({ id });
+    const note = await this.noteRepo.findById(id);
     if (!note) return null;
+
     note.content = content;
-    return this.noteRepository.save(note);
+    return this.noteRepo.save(note);
   }
 
   async deleteNote(id: number): Promise<boolean> {
-    const result = await this.noteRepository.delete(id);
+    const result = await this.noteRepo.delete(id);
     return result.affected !== 0;
   }
 }
