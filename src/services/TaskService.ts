@@ -12,10 +12,16 @@ export class TaskService {
 
   async getAllTasks(query: TaskQueryDTO): Promise<Task[]> {
     const page = query.page || 1;
-    const limit = query.limit || 10;
+    const limit = query.limit || 5;
     const skip = (page - 1) * limit;
   
     const qb = this.taskRepo.createQueryBuilder('task');
+
+    if (query.search) {
+      qb.andWhere('task.title ILIKE :search OR task.description ILIKE :search', {
+        search: `%${query.search}%`,
+      });
+    }
   
     return qb
       .skip(skip)
@@ -23,7 +29,7 @@ export class TaskService {
       .orderBy('task.created_at', 'DESC')
       .getMany();
   }
-  
+
   async getTaskById(id: number): Promise<Task | null> {
     return this.taskRepo.findById(id);
   }
