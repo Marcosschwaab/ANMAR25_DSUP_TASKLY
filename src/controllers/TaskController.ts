@@ -13,8 +13,8 @@ export class TaskController {
     );
   }
 
-  getAll = async (req: Request, res: Response): Promise<void> => {
-    const tasks = await this.service.getAllTasks();
+  getAll = async (req: Request, res: Response) => {
+    const tasks = await this.service.getAllTasks(req.query); 
     res.json(tasks);
   };
 

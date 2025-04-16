@@ -1,6 +1,8 @@
 import { TaskRepository } from '../repositories/TaskRepository';
 import { NoteRepository } from '../repositories/NoteRepository';
 import { Task } from '../entities/Task';
+import { TaskQueryDTO } from '../dtos/TaskQueryDTO';
+
 
 export class TaskService {
   constructor(
@@ -8,10 +10,20 @@ export class TaskService {
     private noteRepo: NoteRepository
   ) {}
 
-  async getAllTasks(): Promise<Task[]> {
-    return this.taskRepo.findAll();
+  async getAllTasks(query: TaskQueryDTO): Promise<Task[]> {
+    const page = query.page || 1;
+    const limit = query.limit || 10;
+    const skip = (page - 1) * limit;
+  
+    const qb = this.taskRepo.createQueryBuilder('task');
+  
+    return qb
+      .skip(skip)
+      .take(limit)
+      .orderBy('task.created_at', 'DESC')
+      .getMany();
   }
-
+  
   async getTaskById(id: number): Promise<Task | null> {
     return this.taskRepo.findById(id);
   }

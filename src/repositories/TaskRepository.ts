@@ -13,6 +13,10 @@ export class TaskRepository {
     return this.repository.find();
   }
 
+  createQueryBuilder(alias: string) {
+    return this.repository.createQueryBuilder(alias);
+  }
+  
   findById(id: number) {
     return this.repository.findOne({
       where: { id },
