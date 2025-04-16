@@ -10,7 +10,7 @@ export class TaskService {
     private noteRepo: NoteRepository
   ) {}
 
-  async getAllTasks(query: TaskQueryDTO): Promise<Task[]> {
+  async getAllTasks(query: TaskQueryDTO): Promise<{ count: number; pages: number; data: Task[] }> {
     const page = query.page || 1;
     const limit = query.limit || 5;
     const skip = (page - 1) * limit;
@@ -22,7 +22,7 @@ export class TaskService {
         search: `%${query.search}%`,
       });
     }
-    
+
     if (query.status) {
       qb.andWhere('task.status = :status', { status: query.status });
     }
@@ -30,12 +30,20 @@ export class TaskService {
     if (query.priority) {
       qb.andWhere('task.priority = :priority', { priority: query.priority });
     }
-  
-    return qb
+
+    const [tasks, count] = await qb
       .skip(skip)
       .take(limit)
       .orderBy('task.created_at', 'DESC')
-      .getMany();
+      .getManyAndCount();
+
+    const pages = Math.ceil(count / limit);
+
+    return {
+      count,
+      pages,
+      data: tasks,
+    };
   }
 
   async getTaskById(id: number): Promise<Task | null> {
