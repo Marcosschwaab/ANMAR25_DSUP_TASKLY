@@ -3,39 +3,39 @@ import { Note } from '../entities/Note';
 import { dataSource } from '../config/database';
 
 export class NoteRepository {
-  private repository: Repository<Note>;
+  private noteRepo: Repository<Note>;
 
   constructor() {
-    this.repository = dataSource.getRepository(Note);
+    this.noteRepo = dataSource.getRepository(Note);
   }
 
   findByTaskId(taskId: number) {
-    return this.repository.find({
+    return this.noteRepo.find({
       where: { task: { id: taskId } },
       relations: ['task'],
     });
   }
 
   create(data: Partial<Note>) {
-    return this.repository.create(data);
+    return this.noteRepo.create(data);
   }
 
   save(note: Note) {
-    return this.repository.save(note);
+    return this.noteRepo.save(note);
   }
 
   delete(id: number) {
-    return this.repository.delete(id);
+    return this.noteRepo.delete(id);
   }
 
   findById(id: number) {
-    return this.repository.findOne({
+    return this.noteRepo.findOne({
       where: { id },
       relations: ['task'],
     });
   }
 
   removeMany(notes: Note[]) {
-    return this.repository.remove(notes);
+    return this.noteRepo.remove(notes);
   }
 }

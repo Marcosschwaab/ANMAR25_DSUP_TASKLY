@@ -4,22 +4,22 @@ import { TaskRepository } from '../repositories/TaskRepository';
 import { NoteRepository } from '../repositories/NoteRepository';
 
 export class TaskController {
-  private service: TaskService;
+  private taskService: TaskService;
 
   constructor() {
-    this.service = new TaskService(
+    this.taskService = new TaskService(
       new TaskRepository(),
       new NoteRepository()
     );
   }
 
   getAll = async (req: Request, res: Response) => {
-    const tasks = await this.service.getAllTasks(req.query); 
+    const tasks = await this.taskService.getAllTasks(req.query); 
     res.json(tasks);
   };
 
   getById = async (req: Request, res: Response): Promise<void> => {
-    const task = await this.service.getTaskById(Number(req.params.id));
+    const task = await this.taskService.getTaskById(Number(req.params.id));
     if (!task) {
       res.status(404).json({ message: 'Task not found' });
       return;
@@ -28,12 +28,12 @@ export class TaskController {
   };
 
   create = async (req: Request, res: Response): Promise<void> => {
-    const task = await this.service.createTask(req.body); 
+    const task = await this.taskService.createTask(req.body); 
     res.status(201).json(task);
   };
 
   update = async (req: Request, res: Response): Promise<void> => {
-    const task = await this.service.updateTask(Number(req.params.id), req.body);
+    const task = await this.taskService.updateTask(Number(req.params.id), req.body);
     if (!task) {
       res.status(404).json({ message: 'Task not found' });
       return;
@@ -42,7 +42,7 @@ export class TaskController {
   };
 
   delete = async (req: Request, res: Response): Promise<void> => {
-    const deleted = await this.service.deleteTask(Number(req.params.id));
+    const deleted = await this.taskService.deleteTask(Number(req.params.id));
     if (!deleted) {
       res.status(404).json({ message: 'Task not found' });
       return;

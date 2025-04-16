@@ -7,9 +7,9 @@ export class NoteController {
   private noteService: NoteService;
 
   constructor() {
-    const noteRepository = new NoteRepository();
-    const taskRepository = new TaskRepository();
-    this.noteService = new NoteService(noteRepository, taskRepository);
+    const noteRepo = new NoteRepository();
+    const taskRepo = new TaskRepository();
+    this.noteService = new NoteService(noteRepo, taskRepo);
   }
   
     createForTask = async (req: Request, res: Response): Promise<void> => {

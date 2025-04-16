@@ -3,36 +3,36 @@ import { Task } from '../entities/Task';
 import { dataSource } from '../config/database';
 
 export class TaskRepository {
-  private repository: Repository<Task>;
+  private taskRepo: Repository<Task>;
 
   constructor() {
-    this.repository = dataSource.getRepository(Task);
+    this.taskRepo = dataSource.getRepository(Task);
   }
 
   findAll() {
-    return this.repository.find();
+    return this.taskRepo.find();
   }
 
   createQueryBuilder(alias: string) {
-    return this.repository.createQueryBuilder(alias);
+    return this.taskRepo.createQueryBuilder(alias);
   }
   
   findById(id: number) {
-    return this.repository.findOne({
+    return this.taskRepo.findOne({
       where: { id },
       relations: ['notes'],
     });
   }
 
   create(data: Partial<Task>) {
-    return this.repository.create(data);
+    return this.taskRepo.create(data);
   }
 
   save(task: Task) {
-    return this.repository.save(task);
+    return this.taskRepo.save(task);
   }
 
   remove(task: Task) {
-    return this.repository.remove(task);
+    return this.taskRepo.remove(task);
   }
 }
