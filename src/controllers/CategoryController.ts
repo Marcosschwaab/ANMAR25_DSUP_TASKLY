@@ -5,7 +5,7 @@ import { TaskRepository } from '../repositories/TaskRepository';
 import { CategoryRepository } from '../repositories/CategoryRepository';
 import { NoteRepository } from '../repositories/NoteRepository';
 
-export class CategoryCOntroller {
+export class CategoryController {
     private categoryService: CategoryService;
     private taskService: TaskService;
 
