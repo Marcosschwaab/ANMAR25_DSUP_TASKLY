@@ -1,26 +1,26 @@
 import { Category } from '../entities/Category';
 import { CategoryRepository } from '../repositories/CategoryRepository';
-import { TaskService } from './TaskService';
+import { TaskRepository } from '../repositories/TaskRepository';
 
 
 export class CategoryService {
     constructor(
         private cateRepo: CategoryRepository,
-        private taskService: TaskService
+        private taskRepo: TaskRepository
     ){}
 
     async getAllCategories(): Promise<Category[]> {
         return this.cateRepo.findAll();
     }
     async createCategoryForTask(taskId: number, name: string): Promise<Category | null> {
-      const task = await this.taskService.getTaskById(taskId);
-  
+      const task = await this.taskRepo.findById(taskId);
       if (!task) return null;
   
-      const category = this.cateRepo.create({ name, task }); 
+      const category = this.cateRepo.create({ name, task });
       return this.cateRepo.save(category);
-  }
-      async getCategoriesByTask(taskId: number): Promise<Category[]> {
+    }
+    
+    async getCategoriesByTask(taskId: number): Promise<Category[]> {
         return this.cateRepo.findByTaskId(taskId);
       }
     

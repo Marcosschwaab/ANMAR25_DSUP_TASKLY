@@ -3,19 +3,16 @@ import { TaskService } from '../services/TaskService';
 import { CategoryService } from '../services/CategoryService';
 import { TaskRepository } from '../repositories/TaskRepository';
 import { CategoryRepository } from '../repositories/CategoryRepository';
-import { NoteRepository } from '../repositories/NoteRepository';
 
 export class CategoryController {
     private categoryService: CategoryService;
     private taskService: TaskService;
 
     constructor() {
-        this.categoryService = new CategoryService(
-          new CategoryRepository(),
-          new TaskService(new TaskRepository(), new NoteRepository())
-        );
-        this.taskService = new TaskService(new TaskRepository(), new NoteRepository());
-      }
+      const cateRepo = new CategoryRepository();
+      const taskRepo = new TaskRepository();
+      this.categoryService = new CategoryService(cateRepo, taskRepo);
+    }
     
       getAll = async (req: Request, res: Response) => {
         const categories = await this.categoryService.getAllCategories();
@@ -24,14 +21,14 @@ export class CategoryController {
 
       createForTask = async (req: Request, res: Response): Promise<void> => {
         const { taskId } = req.params;
-        const { content } = req.body;
+        const { name } = req.body;
     
-        const note = await this.categoryService.createCategoryForTask(Number(taskId), content);
-        if (!note) {
-          res.status(404).json({ message: 'Category not found' });
+        const category = await this.categoryService.createCategoryForTask(Number(taskId), name);
+        if (!category) {
+          res.status(404).json({ message: 'Task not found' });
           return;
         }
-        res.status(201).json(note);
+        res.status(201).json(category);
       };
       getCategoriesByTask = async (req: Request, res: Response): Promise<void> => {
         const { taskId } = req.params;
@@ -49,7 +46,7 @@ export class CategoryController {
       };
     
       update = async (req: Request, res: Response): Promise<void> => {
-        const category = await this.categoryService.updateCategory(Number(req.params.id), req.body.content);
+        const category = await this.categoryService.updateCategory(Number(req.params.id), req.body.name);
         if (!category) {
           res.status(404).json({ message: 'Category not found' });
           return;
