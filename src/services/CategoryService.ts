@@ -11,4 +11,11 @@ export class CategoryService {
     async getAllCategories(): Promise<Category[]> {
         return this.cateRepo.findAll();
     }
+    async createCategoryForTask(taskId: number, content: string): Promise<Category | null> {
+        const task = await this.cateRepo.findById(taskId);
+        if (!task) return null;
+    
+        const note = this.cateRepo.create({ content, task });
+        return this.cateRepo.save(note);
+      }
 }

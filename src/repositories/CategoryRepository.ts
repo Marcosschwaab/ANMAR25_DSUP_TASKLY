@@ -12,5 +12,13 @@ export class CategoryRepository {
 
     findAll():Promise<Category[]> {
         return this.cateRepo.find();
+    }
+    create(data: Partial<Category>): Category {
+        return this.cateRepo.create(data);
+    }
+
+    save(note: Category) {
+        return this.cateRepo.save(note);
       }
+    
 }

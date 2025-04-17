@@ -21,5 +21,17 @@ export class CategoryController {
         const categories = await this.categoryService.getAllCategories();
         res.json(categories);
       };
+
+      createForTask = async (req: Request, res: Response): Promise<void> => {
+        const { taskId } = req.params;
+        const { content } = req.body;
+    
+        const note = await this.categoryService.createCategoryForTask(Number(taskId), content);
+        if (!note) {
+          res.status(404).json({ message: 'Task not found' });
+          return;
+        }
+        res.status(201).json(note);
+      };
 }
 

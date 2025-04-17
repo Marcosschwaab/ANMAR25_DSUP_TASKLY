@@ -7,5 +7,6 @@ const router = Router();
 const categoryController = new CategoryController();
 
 router.get('/categories/', categoryController.getAll);
+router.post('/categories/', categoryController.createForTask);
 
 export default router;
