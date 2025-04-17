@@ -10,3 +10,11 @@ export const createTaskSchema = z.object({
   status: z.enum(statusValues).optional().default('todo'),
   priority: z.enum(priorityValues).optional().default('medium'),
 });
+
+export const updateTaskSchema = z.object({
+  id: z.string().uuid(),
+  title: z.string().min(3).max(255).optional(),
+  description: z.string().min(3).optional(),
+  status: z.enum(statusValues).optional(),
+  priority: z.enum(priorityValues).optional(),
+});
