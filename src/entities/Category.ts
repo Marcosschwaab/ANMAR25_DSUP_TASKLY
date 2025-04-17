@@ -7,7 +7,7 @@ export class Category {
   id: number;
 
   @Column({ type: 'varchar', length: 155 })
-    name: string;
+  name: string;
 
   @ManyToOne(() => Task, task => task.categories)
   task: Task;
