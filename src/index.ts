@@ -3,6 +3,7 @@ import "reflect-metadata"
 import cors from 'cors';
 import taskRoutes from './routes/taskRoutes';
 import noteRoutes from './routes/noteRoutes';
+import categoryRoutes from './routes/categoryRoutes';
 import { errorHandler } from './middlewares/errorHandler';
 
 import { dataSource } from './config/database';
@@ -17,6 +18,8 @@ app.use(cors());
 //routes
 app.use('/api/v1/', taskRoutes);
 app.use('/api/v1/', noteRoutes);
+app.use('/api/v1/', categoryRoutes);
+
 
 // Error handler
 app.use(errorHandler as ErrorRequestHandler);

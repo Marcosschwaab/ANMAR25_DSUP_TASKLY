@@ -1,7 +1,6 @@
+import { Category } from '../entities/Category';
 import { CategoryRepository } from '../repositories/CategoryRepository';
 import { TaskService } from './TaskService';
-
-
 
 export class CategoryService {
     constructor(
@@ -9,7 +8,7 @@ export class CategoryService {
         private taskService: TaskService
     ){}
 
-    async getAllCategories(){
+    async getAllCategories(): Promise<Category[]> {
         return this.cateRepo.findAll();
     }
 }
