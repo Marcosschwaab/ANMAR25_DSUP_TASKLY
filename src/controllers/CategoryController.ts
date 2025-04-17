@@ -28,10 +28,42 @@ export class CategoryController {
     
         const note = await this.categoryService.createCategoryForTask(Number(taskId), content);
         if (!note) {
-          res.status(404).json({ message: 'Task not found' });
+          res.status(404).json({ message: 'Category not found' });
           return;
         }
         res.status(201).json(note);
+      };
+      getCategoriesByTask = async (req: Request, res: Response): Promise<void> => {
+        const { taskId } = req.params;
+        const categories = await this.categoryService.getCategoriesByTask(Number(taskId));
+        res.json(categories);
+      };
+  
+      getById = async (req: Request, res: Response): Promise<void> => {
+        const category = await this.categoryService.getCategoryById(Number(req.params.id));
+        if (!category) {
+          res.status(404).json({ message: 'Category not found' });
+          return;
+        }
+        res.json(category);
+      };
+    
+      update = async (req: Request, res: Response): Promise<void> => {
+        const category = await this.categoryService.updateCategory(Number(req.params.id), req.body.content);
+        if (!category) {
+          res.status(404).json({ message: 'Category not found' });
+          return;
+        }
+        res.json(category);
+      };
+    
+      delete = async (req: Request, res: Response): Promise<void> => {
+        const deleted = await this.categoryService.deleteCategory(Number(req.params.id));
+        if (!deleted) {
+          res.status(404).json({ message: 'Category not found' });
+          return;
+        }
+        res.status(204).send();
       };
 }
 
