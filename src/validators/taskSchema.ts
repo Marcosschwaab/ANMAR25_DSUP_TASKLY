@@ -1,8 +1,12 @@
 import { z } from 'zod';
+import { Task } from '../entities/Task';
+
+const statusValues = ['todo', 'in_progress', 'done'] as const;
+const priorityValues = ['low', 'medium', 'high', 'critical'] as const;
 
 export const createTaskSchema = z.object({
-  title: z.string().min(1, 'tittle is required'),
-  description: z.string().min(1, 'description is required'),
-  status: z.enum(['todo', 'in_progress', 'done']).optional(),
-  priority: z.enum(['low', 'medium', 'high', 'critical']).optional(),
+  title: z.string().min(3).max(255),
+  description: z.string().min(3),
+  status: z.enum(statusValues).optional().default('todo'),
+  priority: z.enum(priorityValues).optional().default('medium'),
 });

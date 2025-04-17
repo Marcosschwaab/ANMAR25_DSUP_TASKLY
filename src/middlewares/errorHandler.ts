@@ -21,6 +21,5 @@ export const errorHandler: ErrorRequestHandler = (
 
   res.status(500).json({
     error: 'this is a message error',
-    detail: process.env.NODE_ENV === 'development' ? error.message : undefined,
   });
 };
