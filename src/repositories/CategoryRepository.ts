@@ -3,7 +3,7 @@ import { Category } from "../entities/Category";
 import { dataSource } from '../config/database';
 
 
-export class CategoryReposytory {
+export class CategoryRepository {
     private cateRepo: Repository<Category>;
 
     constructor() {
