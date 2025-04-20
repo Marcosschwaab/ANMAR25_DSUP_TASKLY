@@ -1,4 +1,5 @@
-import { Repository } from "typeorm";
+import { Repository, FindOneOptions } from "typeorm";
+
 import { Category } from "../entities/Category";
 import { dataSource } from '../config/database';
 
@@ -31,6 +32,10 @@ export class CategoryRepository {
           relations: ['task'],
         });
     }
+
+    findOne(options: FindOneOptions<Category>) {
+        return this.cateRepo.findOne(options);
+    }
     
     removeMany(categories: Category[]) {
         return this.cateRepo.remove(categories);
@@ -42,5 +47,6 @@ export class CategoryRepository {
           relations: ['task'],
         });
     }
+    
 }
     

@@ -40,4 +40,13 @@ export class CategoryService {
         const result = await this.cateRepo.delete(id);
         return result.affected !== 0;
       }
+      async findByTaskAndName(taskId: number, name: string): Promise<Category | null> {
+        return this.cateRepo.findOne({
+          where: {
+            name,
+            task: { id: taskId }
+          },
+          relations: ['task']
+        });
+      }
 }

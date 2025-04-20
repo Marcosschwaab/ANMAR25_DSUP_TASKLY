@@ -22,6 +22,12 @@ export class CategoryController {
       createForTask = async (req: Request, res: Response): Promise<void> => {
         const { taskId } = req.params;
         const { name } = req.body;
+
+        const existing = await this.categoryService.findByTaskAndName(Number(taskId), name.trim());
+        if (existing) {
+          res.status(400).json({ message: 'There is already a task with that title' });
+          return;
+        }
     
         const category = await this.categoryService.createCategoryForTask(Number(taskId), name);
         if (!category) {
