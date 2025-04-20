@@ -9,7 +9,7 @@ const categoryController = new CategoryController();
 
 router.get('/categories/', categoryController.getAll);
 
-router.get('/tasks/:taskId/dategories', categoryController.getCategoriesByTask);
+router.get('/tasks/:taskId/categories', categoryController.getCategoriesByTask);
 router.post('/tasks/:taskId/categories',validateBody(valuesCategorySchema), categoryController.createForTask);
 router.get('/categories/:id', categoryController.getById);
 router.put('/categories/:id',validateBody(valuesCategorySchema), categoryController.update);
