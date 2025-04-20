@@ -15,7 +15,14 @@ export class NoteController {
     createForTask = async (req: Request, res: Response): Promise<void> => {
       const { taskId } = req.params;
       const { content } = req.body;
-  
+
+
+      const existingNote = await this.noteService.findByTaskAndContent(Number(taskId), content.trim());
+      if (existingNote) {
+        res.status(400).json({ message: 'There is already a note with that content' });
+        return;
+      }
+
       const note = await this.noteService.createNoteForTask(Number(taskId), content);
       if (!note) {
         res.status(404).json({ message: 'Task not found' });

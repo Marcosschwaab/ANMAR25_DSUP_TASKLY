@@ -36,4 +36,13 @@ export class NoteService {
     const result = await this.noteRepo.delete(id);
     return result.affected !== 0;
   }
+  async findByTaskAndContent(taskId: number, content: string): Promise<Note | null> {
+    return this.noteRepo.findOne({
+      where: {
+        content,
+        task: { id: taskId },
+      },
+      relations: ['task'],
+    });
+  }
 }

@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { Repository, FindOneOptions } from 'typeorm';
 import { Note } from '../entities/Note';
 import { dataSource } from '../config/database';
 
@@ -37,5 +37,8 @@ export class NoteRepository {
 
   removeMany(notes: Note[]) {
     return this.noteRepo.remove(notes);
+  }
+  findOne(options: FindOneOptions<Note>) {
+    return this.noteRepo.findOne(options);
   }
 }
