@@ -21,6 +21,9 @@ export class Task {
       default: 'medium',
     })
     priority: 'low' | 'medium' | 'high' | 'critical';
+
+    @Column({ type: 'enum', enum: ['anonymous', 'backend', 'frontend', 'design', 'devops'], default: 'anonymous' })
+    category: 'anonymous' | 'backend' | 'frontend' | 'design' | 'devops';
     
     @OneToMany(() => Note, note => note.task)
     notes: Note[];
