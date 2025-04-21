@@ -9,7 +9,7 @@ export const valuesTaskSchema = z.object({
   description: z.string().trim().min(5).max(255),
   status: z.enum(statusValues).optional().default('todo'),
   priority: z.enum(priorityValues).optional().default('medium'),
-  categoryValues: z.enum(categoryValues).optional().default('anonymous'),
+  category: z.enum(categoryValues).optional().default('anonymous'),
   created_at: z.coerce.date().optional(), 
   updated_at: z.coerce.date().nullable().optional(),
 });
