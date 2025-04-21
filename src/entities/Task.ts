@@ -20,6 +20,7 @@ export class Task {
       enum: ['low', 'medium', 'high', 'critical'],
       default: 'medium',
     })
+    
     priority: 'low' | 'medium' | 'high' | 'critical';
 
     @Column({ type: 'enum', enum: ['anonymous', 'backend', 'frontend', 'design', 'devops'], default: 'anonymous' })
