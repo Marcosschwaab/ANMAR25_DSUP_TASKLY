@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, BeforeInsert } from 'typeorm';
 import { Note } from './Note';
-import { Category } from './Category';
 
 @Entity()
 export class Task {
@@ -25,9 +24,6 @@ export class Task {
     
     @OneToMany(() => Note, note => note.task)
     notes: Note[];
-
-    @OneToMany(()=> Category, category => category.task)
-    categories: Category[];
 
     @CreateDateColumn()
     created_at: Date;

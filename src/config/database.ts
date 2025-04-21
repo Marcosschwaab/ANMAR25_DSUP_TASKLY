@@ -2,7 +2,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import * as dotenv from 'dotenv';
 import { Task } from '../entities/Task';
 import {Note} from '../entities/Note';
-import {Category} from '../entities/Category';
+
 
 dotenv.config(); 
 
@@ -16,7 +16,7 @@ const databaseConfig: DataSourceOptions = {
   synchronize: false, 
   logging: false,
   migrations: ['src/migrations/**/*.ts'],
-  entities: [Task, Note, Category]
+  entities: [Task, Note]
 };
 
 export const dataSource = new DataSource(databaseConfig);
