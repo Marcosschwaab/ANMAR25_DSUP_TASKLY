@@ -30,7 +30,8 @@ export class TaskService {
     if (query.priority) {
       qb.andWhere('task.priority = :priority', { priority: query.priority });
     }
-    if (query.priority) {
+
+    if (query.category) {
       qb.andWhere('task.category = :category', { category: query.category });
     }
 
