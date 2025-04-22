@@ -19,38 +19,24 @@ Taskly is a robust task management API that allows users to create, organize, an
 
 ## Installation
 
-### 1. Clone Repository
-```bash
-git clone git@github.com:Marcosschwaab/ANMAR25_DSUP_TASKLY.git
-cd ANMAR25_DSUP_TASKLY
-```
-You're absolutely right! Here's the updated installation section with the `.env` configuration:
-
----
-
-## Installation Guide
-
-### 1. Clone Repository
+###  Clone Repository
 ```bash
 git clone git@github.com:Marcosschwaab/ANMAR25_DSUP_TASKLY.git
 cd ANMAR25_DSUP_TASKLY
 ```
 
-### 2. Set Up Environment Variables
-Create a `.env` file in the project root with these values:
+###  Environment configure (.env)
+Rename the `.env.example` file to `.env` and configure the database credentials:
+**.env.example**
 ```env
-# Database Configuration
 DATABASE_HOST=localhost
 DATABASE_PORT=3306
-DATABASE_USERNAME=your_db_username
-DATABASE_PASSWORD=your_db_password
+DATABASE_USERNAME= your_user
+DATABASE_PASSWORD= your_password
 DATABASE_NAME=taskly
-
-# App Configuration
 PORT=3000
 ```
 
-> **Important**: Never commit your `.env` file to version control!
 ---
 
 ## Environment Variables Reference
@@ -64,34 +50,23 @@ PORT=3000
 | `DATABASE_NAME` | Database name | `taskly` | Yes |
 | `PORT` | Application port | `3000` | No |
 
-For development, you may want to create a `.env.example` file in your repository (without sensitive values) to help other developers configure their environment:
 
-**.env.example**
-```env
-DATABASE_HOST=localhost
-DATABASE_PORT=3306
-DATABASE_USERNAME=
-DATABASE_PASSWORD=
-DATABASE_NAME=taskly
-PORT=3000
-```
-
-### 3. Install Dependencies
+### . Install Dependencies
 ```bash
 npm install
 ```
 
-### 4. Start Database
+### . Start Database
 ```bash
 docker-compose -f ./docker/docker-compose.yml up -d
 ```
 
-### 5. Run Migrations
+### . Run Migrations
 ```bash
 npm run migration:run
 ```
 
-### 6. Start Application
+### . Start Application
 ```bash
 npm run start
 ```
