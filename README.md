@@ -56,7 +56,31 @@ PORT=3000
 npm install
 ```
 
-### . Start Database
+
+### . Configure credentials Database with Docker-Compose
+Configure the database credentials: `docker-compose.yml` file in the `docker` directory:
+
+```yaml
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_USER: USER_DB
+      MYSQL_ROOT_PASSWORD: PASSWORD_DB
+      MYSQL_DATABASE: taskly
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
+```
+
+### . Start Docker-Compose
 ```bash
 docker-compose -f ./docker/docker-compose.yml up -d
 ```
@@ -77,7 +101,7 @@ npm run start
 
 #### Get All Tasks (with filters)
 ```
-GET /tasks
+GET /api/v1/tasks
 ```
 
 **Example Response:**
@@ -101,7 +125,7 @@ GET /tasks
 
 #### Create Task
 ```
-POST /tasks
+POST /api/v1/tasks
 ```
 **Request Body:**
 ```json
@@ -128,11 +152,36 @@ POST /tasks
 }
 ```
 
+#### Update Task
+```
+PUT /api/v1/tasks/:id
+```
+**Request Body:**
+```json
+{
+  "title": "New Feature",
+  "description": "Implement user dashboard",
+  "status": "todo",
+  "priority": "medium",
+  "category": "frontend"
+}
+```
+
+#### Delete Task
+
+```
+DELETE /api/v1/notes/:id
+```
+**Success Response (204):**
+```json
+no return
+```
+
 ### Notes
 
 #### Add Note to Task
 ```
-POST /tasks/:taskId/notes
+POST /api/v1/tasks/:taskId/notes
 ```
 **Request Body:**
 ```json
@@ -157,7 +206,7 @@ POST /tasks/:taskId/notes
 
 #### Get Task Notes
 ```
-GET /tasks/:taskId/notes
+GET /api/v1/tasks/:taskId/notes
 ```
 **Success Response:**
 ```json
@@ -202,11 +251,11 @@ GET /tasks/:taskId/notes
 | `limit` | Integers > 0 (default: 5) |
 
 **Pro Tip**: Combine parameters for precise queries like:  
-`/tasks?search=bug&status=done&priority=high`
+`/api/v1/tasks?search=bug&status=done&priority=high`
 
 ### **. Basic Pagination**
 ```http
-GET /tasks?page=2&limit=3
+GET /api/v1/tasks?page=2&limit=3
 ```
 **Explanation**:  
 - Returns the 2nd page with 3 tasks per page  
@@ -231,7 +280,7 @@ GET /tasks?page=2&limit=3
 
 ### **. Status Filter**
 ```http
-GET /tasks?status=in_progress
+GET /api/v1/tasks?status=in_progress
 ```
 **Explanation**:  
 - Returns only tasks with `in_progress` status  
@@ -255,7 +304,7 @@ GET /tasks?status=in_progress
 
 ### **. Priority Filter**
 ```http
-GET /tasks?priority=high
+GET /api/v1/tasks?priority=high
 ```
 **Explanation**:  
 - Returns only `high` priority tasks  
@@ -278,7 +327,7 @@ GET /tasks?priority=high
 
 ### **. Full-Text Search**
 ```http
-GET /tasks?search=authentication
+GET /api/v1/tasks?search=authentication
 ```
 **Explanation**:  
 - Searches for "authentication" in `title` or `description` (case insensitive)  
@@ -301,7 +350,7 @@ GET /tasks?search=authentication
 
 ### **. Combined Filters**
 ```http
-GET /tasks?status=todo&priority=critical&category=backend&page=1
+GET /api/v1/tasks?status=todo&priority=critical&category=backend&page=1
 ```
 **Explanation**:  
 - Returns `todo` + `critical` + `backend` tasks (with optional pagination)  
@@ -326,7 +375,7 @@ GET /tasks?status=todo&priority=critical&category=backend&page=1
 
 ### **. Default Sorting**
 ```http
-GET /tasks
+GET /api/v1/tasks
 ```
 **Default behavior**:  
 - Sorts by `created_at DESC` (newest first)  
@@ -353,7 +402,7 @@ GET /tasks
 
 #### Add Note to Task
 ```
-POST /tasks/:taskId/notes
+POST /api/v1/tasks/:taskId/notes
 ```
 **Request Body:**
 ```json
@@ -376,9 +425,44 @@ POST /tasks/:taskId/notes
 }
 ```
 
+#### Update Note
+```
+PUT /api/v1/notes/:id
+```
+**Request Body:**
+```json
+{
+  "content": "Updated note content"
+}
+```
+
+**Success Response:**
+```json
+{
+  "id": 1,
+  "content": "Updated note content",
+  "task": {
+    "id": 2,
+    "title": "New Feature"
+  },
+  "created_at": "2023-10-15T12:00:00Z",
+  "updated_at": "2023-10-16T09:20:00Z"
+}
+```
+
+#### Delete Note
+```
+DELETE /api/v1/notes/:id
+```
+
+**Success Response (204):**
+```
+No content
+```
+
 #### Get Task Notes
 ```
-GET /tasks/:taskId/notes
+GET /api/v1/tasks/:taskId/notes
 ```
 **Success Response:**
 ```json
@@ -424,20 +508,278 @@ GET /tasks/:taskId/notes
 }
 ```
 
-## Error Responses
-
-All error responses follow this format:
-```json
-{
-  "message": "Descriptive error message",
-  "statusCode": 400
-}
-```
+### Tasks Validates / Errors
 
 Common status codes:
 - 400: Validation errors
 - 404: Resource not found
 - 500: Server error
 
+#### Create/Update Task Validation Errors
+```
+POST /api/v1/tasks
+PUT /api/v1/tasks/:id
+```
+
+**Possible Error Responses (400 Bad Request):**
+
+1. **Title Validation Errors**:
+```json
+{
+  "message": "Validation failed",
+  "errors": [
+    {
+      "field": "title",
+      "errors": [
+        "String must contain at least 3 character(s)",
+        "Title contains invalid characters"
+      ]
+    }
+  ]
+}
+```
+
+2. **Description Validation Errors**:
+```json
+{
+  "message": "Validation failed",
+  "errors": [
+    {
+      "field": "description",
+      "errors": [
+        "String must contain at least 5 character(s)",
+        "Description contains invalid characters"
+      ]
+    }
+  ]
+}
+```
+
+3. **Status Validation Error**:
+```json
+{
+  "message": "Validation failed",
+  "errors": [
+    {
+      "field": "status",
+      "errors": [
+        "Invalid enum value. Expected 'todo' | 'in_progress' | 'done', received 'invalid_status'"
+      ]
+    }
+  ]
+}
+```
+
+4. **Priority Validation Error**:
+```json
+{
+  "message": "Validation failed",
+  "errors": [
+    {
+      "field": "priority",
+      "errors": [
+        "Invalid enum value. Expected 'low' | 'medium' | 'high' | 'critical', received 'urgent'"
+      ]
+    }
+  ]
+}
+```
+
+5. **Category Validation Error**:
+```json
+{
+  "message": "Validation failed",
+  "errors": [
+    {
+      "field": "category",
+      "errors": [
+        "Invalid enum value. Expected 'anonymous' | 'backend' | 'frontend' | 'design' | 'devops', received 'marketing'"
+      ]
+    }
+  ]
+}
+```
+
+6. **Multiple Field Errors**:
+```json
+{
+  "message": "Validation failed",
+  "errors": [
+    {
+      "field": "title",
+      "errors": ["String must contain at least 3 character(s)"]
+    },
+    {
+      "field": "description",
+      "errors": ["Description contains invalid characters"]
+    },
+    {
+      "field": "priority",
+      "errors": ["Invalid enum value"]
+    }
+  ]
+}
+```
+
+### Notes Validates / Errors
+
+#### Create/Update Note Validation Errors
+```
+POST /api/v1/tasks/:taskId/notes
+PUT /api/v1/notes/:id
+```
+
+**Possible Error Responses (400 Bad Request):**
+
+1. **Content Validation Errors**:
+```json
+{
+  "message": "Validation failed",
+  "errors": [
+    {
+      "field": "content",
+      "errors": [
+        "String must contain at least 5 character(s)",
+        "Content contains invalid characters"
+      ]
+    }
+  ]
+}
+```
+
+2. **Empty Content**:
+```json
+{
+  "message": "Validation failed",
+  "errors": [
+    {
+      "field": "content",
+      "errors": ["String must contain at least 5 character(s)"]
+    }
+  ]
+}
+```
+
+3. **Content Too Long**:
+```json
+{
+  "message": "Validation failed",
+  "errors": [
+    {
+      "field": "content",
+      "errors": ["String must contain at most 255 character(s)"]
+    }
+  ]
+}
+```
+
+4. **Invalid Characters in Content**:
+```json
+{
+  "message": "Validation failed",
+  "errors": [
+    {
+      "field": "content",
+      "errors": ["Content contains invalid characters"]
+    }
+  ]
+}
+```
+
+## Common Error Responses
+
+### 404 Not Found
+**Task not found**:
+```json
+{
+  "message": "Task with ID 999 not found",
+  "statusCode": 404
+}
+```
+
+**Note not found**:
+```json
+{
+  "message": "Note with ID 999 not found",
+  "statusCode": 404
+}
+```
+
+### 500 Internal Server Error
+```json
+{
+  "message": "An unexpected error occurred",
+  "statusCode": 500
+}
+```
+
+## Validation Rules Reference
+
+### Task Validation Rules
+| Field | Rules |
+|-------|-------|
+| `title` | - Required<br>- 3-255 characters<br>- Only letters, numbers, and basic punctuation<br>- No special characters |
+| `description` | - Required<br>- 5-255 characters<br>- Only letters, numbers, and basic punctuation |
+| `status` | - Must be one of: `todo`, `in_progress`, `done`<br>- Default: `todo` |
+| `priority` | - Must be one of: `low`, `medium`, `high`, `critical`<br>- Default: `medium` |
+| `category` | - Must be one of: `anonymous`, `backend`, `frontend`, `design`, `devops`<br>- Default: `anonymous` |
+
+### Note Validation Rules
+| Field | Rules |
+|-------|-------|
+| `content` | - Required<br>- 5-255 characters<br>- Only letters, numbers, and basic punctuation<br>- No special characters |
+
+## Example Complete Error Scenario
+
+**Request:**
+```
+POST /api/v1/tasks
+```
+**Body:**
+```json
+{
+  "title": "A",
+  "description": "Desc$%",
+  "priority": "urgent",
+  "category": "sales"
+}
+```
+
+**Response (400 Bad Request):**
+```json
+{
+  "message": "Validation failed",
+  "errors": [
+    {
+      "field": "title",
+      "errors": [
+        "String must contain at least 3 character(s)"
+      ]
+    },
+    {
+      "field": "description",
+      "errors": [
+        "Description contains invalid characters"
+      ]
+    },
+    {
+      "field": "priority",
+      "errors": [
+        "Invalid enum value. Expected 'low' | 'medium' | 'high' | 'critical', received 'urgent'"
+      ]
+    },
+    {
+      "field": "category",
+      "errors": [
+        "Invalid enum value. Expected 'anonymous' | 'backend' | 'frontend' | 'design' | 'devops', received 'sales'"
+      ]
+    }
+  ]
+}
+```
+
 ## License
 ISC License
+
+
+

@@ -18,8 +18,6 @@ app.use(cors());
 app.use('/api/v1/', taskRoutes);
 app.use('/api/v1/', noteRoutes);
 
-
-
 // Error handler
 app.use(errorHandler as ErrorRequestHandler);
 
